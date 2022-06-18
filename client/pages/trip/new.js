@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import FormPassenger from './../components/FormPassenger.js'
-import { getAllCities } from './../services/main.js';
+import styles from './../../styles/Home.module.css'
+import FormTrip from './../../components/FormTrip.js'
+import { getAllCities } from './../../services/main.js';
 
 export default function Home({ cities }) {
   return (
@@ -18,7 +18,7 @@ export default function Home({ cities }) {
         </h1>
       </main>  */}
 
-      <FormPassenger cities={cities}/>
+      <FormTrip cities={cities}/>
 
       <footer className={styles.footer}>
         Test Footer

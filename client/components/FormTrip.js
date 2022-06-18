@@ -1,8 +1,16 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select, TimePicker } from 'antd';
 import { newTrip } from './../services/main.js';
 import { modalNotification } from './commons/Notifications.js';
 
+const mapToSelectOptions = (cities) => {
+    return cities.map((city) => {
+        return { 
+            label: city.name, 
+            value: city._id 
+        }
+    })
+}
 class FormTrip extends React.Component {
     constructor(props) {
         super(props);
@@ -35,6 +43,7 @@ class FormTrip extends React.Component {
     };
 
     render() {
+        const { cities } = this.props;
         return(
             <div>
                 <Form
@@ -50,8 +59,9 @@ class FormTrip extends React.Component {
                                     message: "Please input the departure city"
                                 }
                             ]}>
-                                <Input>
-                                </Input>
+                                <Select
+                                    options={mapToSelectOptions(cities)}
+                                />
                         </Form.Item>
                         <Form.Item
                             label="Arrival City"
@@ -62,8 +72,35 @@ class FormTrip extends React.Component {
                                     message: "Please input the arrival city"
                                 }
                             ]}>
-                                <Input>
-                                </Input>
+                                <Select
+                                    options={mapToSelectOptions(cities)}
+                                />
+                        </Form.Item>
+                        <Form.Item
+                            label="Departure Time"
+                            name="departure_time"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please input the departure time."
+                                }
+                            ]}>
+                                <TimePicker
+                                    format="HH:mm"
+                                />
+                        </Form.Item>
+                        <Form.Item
+                            label="Arrival Time"
+                            name="arrival_time"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please input the arrival time."
+                                }
+                            ]}>
+                                <TimePicker
+                                    format="HH:mm"
+                                />
                         </Form.Item>
                         <Form.Item
                             label="Limit passengers"
