@@ -15,10 +15,6 @@ var trip = new Schema({
         ref: 'City',
         es_schema: City,
     },
-    cant_passengers_total: {
-        type: Number,
-        default: 0,
-    },
     departure_time: {
         type: Date,
         default: null,
@@ -26,6 +22,14 @@ var trip = new Schema({
     arrival_time: {
         type: Date,
         default: null,
+    },
+    cant_passengers_total: {
+        type: Number,
+        default: -1,
+    },
+    cant_passengers_available: {
+        type: Number,
+        default: -1,
     },
     passengers: [{
         type: Schema.Types.ObjectId,
