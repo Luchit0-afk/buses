@@ -21,7 +21,6 @@ module.exports.newTrip = async function (req, res) {
 module.exports.findTrips = async function (req, res) {
     try {
         const { departure_city, arrival_city } = req.body;
-        console.log(departure_city);
         const trips = await Trip.find({
             departure_city,
             arrival_city,
