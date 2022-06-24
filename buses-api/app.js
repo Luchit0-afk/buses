@@ -3,6 +3,7 @@ require('./config/db_connection.js');
 
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -10,11 +11,13 @@ var logger = require('morgan');
 var livereload = require("livereload");
 var connectLiveReload = require("connect-livereload");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var CreditCard = require('./routes/credit_card/router.js');
+var Trip = require('./routes/trip/router.js');
+var City = require('./routes/city/router.js');
+var Passenger = require('./routes/passenger/router.js');
 
 var app = express();
+app.use(cors());
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
@@ -25,19 +28,16 @@ liveReloadServer.server.once("connection", () => {
 
 app.use(connectLiveReload());
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/credit_card', CreditCard);
+app.use('/trip', Trip);
+app.use('/city', City);
+app.use('/passenger', Passenger);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
