@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import FormTrip from '../../components/FormTrip.js'
+import FormTrip from '../../components/Forms/FormTrip.js'
 import { getAllCreditsCard } from '../../services/main.js'
 
 export default function Home({ creditsCards }) {

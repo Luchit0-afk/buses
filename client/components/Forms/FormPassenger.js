@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Button, Select, Spin, Input } from 'antd';
-import { findTrips, newPassenger } from './../services/main.js';
-import { modalNotification } from './commons/Notifications.js';
+import { findTrips, newPassenger } from '../../services/main.js';
+import { modalNotification } from '../commons/Notifications.js';
 
 const mapCitiesToSelectOptions = (cities) => {
     return cities.map((city) => {
@@ -90,6 +90,11 @@ class FormPassenger extends React.Component {
         }
     }
 
+    //Tal vez otra buena idea seria guardar las ciudades en el estado y actualizarlas en tiempo real
+    onSelectedCity = () => {
+        this.setState({ isSearched: false });
+    };
+
     render() {
         const { cities } = this.props;
         const { isSearching, isSearched, trips, isSelected } = this.state;
@@ -111,6 +116,7 @@ class FormPassenger extends React.Component {
                             ]}>
                                 <Select
                                     options={mapCitiesToSelectOptions(cities)}
+                                    onChange={this.onSelectedCity}
                                 />
                         </Form.Item>
                         <Form.Item
@@ -124,6 +130,7 @@ class FormPassenger extends React.Component {
                             ]}>
                                 <Select
                                     options={mapCitiesToSelectOptions(cities)}
+                                    onChange={this.onSelectedCity}
                                 />
                         </Form.Item>
                         <Form.Item>

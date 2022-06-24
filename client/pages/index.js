@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import FormPassenger from './../components/FormPassenger.js'
+import FormPassenger from '../components/Forms/FormPassenger.js'
 import Router from 'next/router';
 import { getAllCities } from './../services/main.js';
 import { Image, Button } from 'antd';
@@ -71,13 +71,9 @@ export default function Home({ cities }) {
           <button 
             type="button" 
             className="btn btn-primary fs-4 my-3"
-            onClick={() => Router.push('/city/new')}>
+            onClick={() => Router.push('/passenger/buy-a-ticket')}>
               Buy a Ticket
           </button>
-
-          {/* <Button type="primary">
-            Buy a Ticket
-          </Button> */}
         </div>
         <hr/>
         <footer className="d-flex justify-content-center text-center mx-5">
@@ -85,7 +81,6 @@ export default function Home({ cities }) {
         </footer>
       </main>
 
-      {/* <FormPassenger cities={cities}/> */}
     </div>
   )
 }

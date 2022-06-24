@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, Select, TimePicker } from 'antd';
-import { newTrip } from './../services/main.js';
-import { modalNotification } from './commons/Notifications.js';
+import { newTrip } from '../../services/main.jss';
+import { modalNotification } from '../commons/Notifications.jss';
 
 const mapToSelectOptions = (cities) => {
     return cities.map((city) => {
