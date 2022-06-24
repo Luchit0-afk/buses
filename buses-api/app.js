@@ -15,6 +15,7 @@ var CreditCard = require('./routes/credit_card/router.js');
 var Trip = require('./routes/trip/router.js');
 var City = require('./routes/city/router.js');
 var Passenger = require('./routes/passenger/router.js');
+var User = require('./routes/user/router.js');
 
 var app = express();
 app.use(cors());
@@ -38,6 +39,7 @@ app.use('/credit_card', CreditCard);
 app.use('/trip', Trip);
 app.use('/city', City);
 app.use('/passenger', Passenger);
+app.use('/user', User);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
