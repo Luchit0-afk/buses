@@ -23,12 +23,13 @@ module.exports.login = async function (req, res) {
           res.status(401).json({ success: false, err });
           return;
         }
-        console.log(user);
+        const msg = user.msg;
+        user.msg = undefined;
         if( !!user ){
-            res.status(200).json({ success: true, user });
+            res.status(200).json({ success: true, msg, user });
         }
         else{
-            res.status(200).json({ success: false });
+            res.status(200).json({ success: false, msg: "Something went wrong when try to login. Please try again." });
         }
     })(req, res);
 }
