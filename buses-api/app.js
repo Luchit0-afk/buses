@@ -7,15 +7,18 @@ var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-var livereload = require("livereload");
-var connectLiveReload = require("connect-livereload");
+var passport = require('passport');
+var session = require('express-session');
+var PassportLocal = require('passport-local').Strategy;
 
 var CreditCard = require('./routes/credit_card/router.js');
 var Trip = require('./routes/trip/router.js');
 var City = require('./routes/city/router.js');
 var Passenger = require('./routes/passenger/router.js');
 var User = require('./routes/user/router.js');
+
+var livereload = require("livereload");
+var connectLiveReload = require("connect-livereload");
 
 var app = express();
 app.use(cors());
@@ -26,15 +29,46 @@ liveReloadServer.server.once("connection", () => {
     liveReloadServer.refresh("/");
   }, 100);
 });
-
 app.use(connectLiveReload());
+
+//Midlewares
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'pug')
+
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'ultra-secret',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
+passport.use(new PassportLocal( function(username, password, done){
+  //Aca debemos buscar en la base de datos el username y la contraseña para verificar que los datos esten en la base de datos
+  if(username === "test" && password === "12345"){
+    return done(null, { id: 1, username: "test" });
+  }
+  done(null, { success: false });
+  //CREO QUE NUNCA DEVOLVEMOS EL ERROR SI HUBO ALGUNO
+}))
+
+//Serializacion
+passport.serializeUser(function(user, done){
+  done(null, user.id);
+})
+
+//Deserializacion
+passport.deserializeUser(function(id, done){
+  done(null, { id: 1, username: "Luciano" });
+})
+
+//Routes
 app.use('/credit_card', CreditCard);
 app.use('/trip', Trip);
 app.use('/city', City);
