@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import { loginFetch } from './../../services/user.js';
+import { registerFetch } from './../../services/user.js';
 import { modalNotification } from '../commons/Notifications.js';
 
-class LogIn extends React.Component {
+class Register extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -12,18 +12,8 @@ class LogIn extends React.Component {
 
     onFinish = async values => {
         try {
-            const isLoged = await loginFetch( values );
-            if( !!isLoged.success ){
-                if( !!isLoged.msg ){
-                    modalNotification("warning", isLoged.msg.toString() );
-                }
-                else{
-                    modalNotification("success", "You are login successfuly");
-                }
-            }
-            else{
-                modalNotification("error", isLoged.msg.toString() );
-            }
+            await registerFetch( values );
+            modalNotification("success", "The user has been charged");
         } catch(error) {
             console.log(error);
             modalNotification("error", error.toString());
@@ -52,7 +42,7 @@ class LogIn extends React.Component {
                             ]}>
                                 <Input type="text" />
                         </Form.Item>
-                        {/* <Form.Item
+                        <Form.Item
                             label="Email"
                             name="email"
                             rules={[
@@ -62,7 +52,7 @@ class LogIn extends React.Component {
                                 }
                             ]}>
                                 <Input type="email" />
-                        </Form.Item> */}
+                        </Form.Item>
                         <Form.Item
                             label="Password"
                             name="password"
@@ -78,7 +68,7 @@ class LogIn extends React.Component {
                             <Button 
                                 type="primary" 
                                 htmlType="submit">
-                                    Log In
+                                    Register
                             </Button>
                         </Form.Item>
                 </Form>
@@ -87,4 +77,4 @@ class LogIn extends React.Component {
     }
 }
 
-export default (LogIn);
+export default (Register);
