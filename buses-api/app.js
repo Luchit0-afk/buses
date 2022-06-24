@@ -3,6 +3,7 @@ require('./config/db_connection.js');
 
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -13,8 +14,10 @@ var connectLiveReload = require("connect-livereload");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var CreditCard = require('./routes/credit_card/router.js');
+var Trip = require('./routes/trip/router.js');
 
 var app = express();
+app.use(cors());
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
@@ -38,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/credit_card', CreditCard);
+app.use('/trip', Trip);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

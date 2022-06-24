@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import { FormInstance } from 'antd/lib/form';
+import { newTrip } from './../services/main.js';
+import { modalNotification } from './commons/Notifications.js';
 
 class FormTrip extends React.Component {
     constructor(props) {
@@ -9,8 +10,24 @@ class FormTrip extends React.Component {
         this.formRef = React.createRef();
     }
 
-    onFinish = values => {
-        console.log(values)
+    onFinish = async values => {
+        const cant_passengers_total = parseInt(values.cant_passengers_total);
+        if (!Number.isInteger( cant_passengers_total )){
+            modalNotification("error", "The limit passengers has be a number and integer");
+        }
+        else {
+            try {
+                await newTrip({
+                    ...values,
+                    cant_passengers_total,
+                });
+                modalNotification("success", "The trip has been charged");
+            } catch(error) {
+                console.log(error);
+                modalNotification("error", error.toString());
+            }
+             
+        }
     }
 
     onFinishFailed = (errorInfo) => {
@@ -57,7 +74,7 @@ class FormTrip extends React.Component {
                                     message: "Please input how many passengers can travel"
                                 }
                             ]}>
-                                <Input>
+                                <Input >
                                 </Input>
                         </Form.Item>
                         <Form.Item>
