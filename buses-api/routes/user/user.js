@@ -3,7 +3,7 @@ var User = require('./../../schemas/user_schema.js');
 
 module.exports.register = async function (req, res) {
     try {
-        const { email, password } = req.body;
+        const { username, email, password } = req.body;
         const user = await User.create({
             username,
             email,
@@ -20,11 +20,15 @@ module.exports.login = async function (req, res) {
     passport.authenticate('local', function(err, user, info) {
         if (err) {
           console.log('passport error exception');
-          res.status(401).json(err);
+          res.status(401).json({ success: false, err });
           return;
         }
         console.log(user);
-        console.log(info);
-        res.status(200).json({ success: true });
+        if( !!user ){
+            res.status(200).json({ success: true, user });
+        }
+        else{
+            res.status(200).json({ success: false });
+        }
     })(req, res);
 }
