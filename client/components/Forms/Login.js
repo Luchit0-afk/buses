@@ -2,8 +2,12 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { loginFetch } from './../../services/user.js';
 import { modalNotification } from '../commons/Notifications.js';
+import { UserContext } from "./../../config/context/UserContext.js"
 
 class LogIn extends React.Component {
+
+    static contextType = UserContext;
+
     constructor(props) {
         super(props);
         this.state = {};
@@ -12,17 +16,28 @@ class LogIn extends React.Component {
 
     onFinish = async values => {
         try {
-            const isLoged = await loginFetch( values );
-            if( !!isLoged.success ){
-                if( !!isLoged.msg ){
-                    modalNotification("warning", isLoged.msg.toString() );
-                }
-                else{
-                    modalNotification("success", "You are login successfuly");
-                }
+            console.log(this.context);
+            const state = this.context[0];
+            const setState = this.context[1];
+            const data = await loginFetch( values );
+            if( !!data.success ){
+                console.log(data);
+                setState(oldValues => {
+                    return { ...oldValues, token: data.token }
+                  })
+                console.log(this.context);
+                //Working well, clean de fucking code
+
+                // if( !!isLoged.msg ){
+                //     modalNotification("warning", isLoged.msg.toString() );
+                // }
+                // else{
+                //     modalNotification("success", "You are login successfuly");
+                // }
             }
             else{
-                modalNotification("error", isLoged.msg.toString() );
+                modalNotification("error", "Something went wrong when try to login.");
+                // modalNotification("error", isLoged.msg.toString() );
             }
         } catch(error) {
             console.log(error);
@@ -35,13 +50,17 @@ class LogIn extends React.Component {
     };
 
     render() {
+        console.log(this.context);
+        // console.log(this.context);
+        // console.log(state);
+        // console.log(setState);
         return(
             <div>
                 <Form
                     ref={this.formRef}
                     onFinish={this.onFinish}
                     onFinishFailed={this.onFinishFailed}>
-                        <Form.Item
+                        {/* <Form.Item
                             label="Username"
                             name="username"
                             rules={[
@@ -51,10 +70,11 @@ class LogIn extends React.Component {
                                 }
                             ]}>
                                 <Input type="text" />
-                        </Form.Item>
-                        {/* <Form.Item
+                        </Form.Item> */}
+                        <Form.Item
                             label="Email"
-                            name="email"
+                            // Changes username to email
+                            name="username"
                             rules={[
                                 {
                                     required: true,
@@ -62,7 +82,7 @@ class LogIn extends React.Component {
                                 }
                             ]}>
                                 <Input type="email" />
-                        </Form.Item> */}
+                        </Form.Item>
                         <Form.Item
                             label="Password"
                             name="password"

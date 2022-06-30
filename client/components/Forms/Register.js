@@ -2,8 +2,12 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { registerFetch } from './../../services/user.js';
 import { modalNotification } from '../commons/Notifications.js';
+import { UserContext } from "./../../config/context/UserContext.js"
 
 class Register extends React.Component {
+
+    static contextType = UserContext;
+
     constructor(props) {
         super(props);
         this.state = {};
@@ -12,8 +16,22 @@ class Register extends React.Component {
 
     onFinish = async values => {
         try {
-            await registerFetch( values );
-            modalNotification("success", "The user has been charged");
+            const state = this.context[0];
+            const setState = this.context[1];
+            const data = await registerFetch( values );
+            if( !!data.success ){
+                console.log(data);
+                await setState(oldValues => {
+                    return { ...oldValues, token: data.token }
+                  })
+                console.log(this.context);
+                //Working bad, if register a user not charge the token in the context.
+                //The second chance, the token is charged
+                modalNotification("success", "The user has been charged");
+            }
+            else{
+                modalNotification("error", "Something went wrong when try to register.");
+            }
         } catch(error) {
             console.log(error);
             modalNotification("error", error.toString());
@@ -31,7 +49,8 @@ class Register extends React.Component {
                     ref={this.formRef}
                     onFinish={this.onFinish}
                     onFinishFailed={this.onFinishFailed}>
-                        <Form.Item
+                        {/* Todavia no esta implementado guardar username en la base de datos */}
+                        {/* <Form.Item
                             label="Username"
                             name="username"
                             rules={[
@@ -41,10 +60,11 @@ class Register extends React.Component {
                                 }
                             ]}>
                                 <Input type="text" />
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item
                             label="Email"
-                            name="email"
+                            // Changes username to email
+                            name="username"
                             rules={[
                                 {
                                     required: true,

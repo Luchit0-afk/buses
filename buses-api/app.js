@@ -1,6 +1,12 @@
-//Require the data base configurations
+if (process.env.NODE_ENV !== "production") {
+  // Load environment variables from .env file in non prod environments
+  require("dotenv").config()
+}
 require('./config/db_connection.js');
-require('./config/passport.js');
+// require('./config/passport.js');
+require("./config/strategies/JwtStrategy")
+require("./config/strategies/LocalStrategy")
+require("./config/authenticate")
 
 var createError = require('http-errors');
 var express = require('express');
@@ -36,7 +42,7 @@ app.use(connectLiveReload());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(session({
   secret: 'ultra-secret',
   resave: true,

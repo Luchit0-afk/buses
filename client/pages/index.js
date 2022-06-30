@@ -1,11 +1,38 @@
+import { useCallback, useContext, useEffect } from "react"
 import Head from 'next/head'
 import FormPassenger from '../components/Forms/FormPassenger.js'
 import Router from 'next/router';
 import { getAllCities } from './../services/main.js';
 import { Image, Button } from 'antd';
+import { UserContext } from "./../config/context/UserContext.js";
 
 export default function Home({ cities }) {
-  return (
+  const [userContext, setUserContext] = useContext(UserContext)
+  const verifyUser = useCallback(() => {
+    fetch("http://localhost:3000/user/refreshToken", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    }).then(async response => {
+      if (response.ok) {
+        const data = await response.json()
+        setUserContext(oldValues => {
+          return { ...oldValues, token: data.token }
+        })
+      } else {
+        setUserContext(oldValues => {
+          return { ...oldValues, token: null }
+        })
+      }
+      // call refreshToken every 5 minutes to renew the authentication token.
+      setTimeout(verifyUser, 5 * 60 * 1000)
+    })
+  }, [setUserContext])
+
+  useEffect(() => {
+    verifyUser()
+  }, [verifyUser])
+
+  return userContext.token === null ? (
     <div >
       <Head>
         <title>Buses App</title>
@@ -68,20 +95,24 @@ export default function Home({ cities }) {
           />
         </div> */}
         <div className="d-flex justify-content-center text-center mx-5">
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn btn-primary fs-4 my-3"
             onClick={() => Router.push('/passenger/buy-a-ticket')}>
-              Buy a Ticket
+            Buy a Ticket
           </button>
         </div>
-        <hr/>
+        <hr />
         <footer className="d-flex justify-content-center text-center mx-5">
           <p>Test Footer</p>
         </footer>
       </main>
 
     </div>
+  ) : userContext.token ? (
+    <div>Welcome</div>
+  ) : (
+    <div>Cargando</div>
   )
 }
 
