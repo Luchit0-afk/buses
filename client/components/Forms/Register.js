@@ -3,6 +3,7 @@ import { Form, Input, Button } from 'antd';
 import { registerFetch } from './../../services/user.js';
 import { modalNotification } from '../commons/Notifications.js';
 import { login } from './../../utils/auth.js';
+import Router from 'next/router';
 class Register extends React.Component {
     constructor(props) {
         super(props);
@@ -15,6 +16,7 @@ class Register extends React.Component {
             //Tal vez deberia ser mas robusto esto, en caso de que falle el registerFetch
             const { token } = await registerFetch( values );
             await login({ token });
+            Router.push("/");
             // if( !!data.success ){
             //     console.log(data);
             //     await setState(oldValues => {

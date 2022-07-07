@@ -3,6 +3,7 @@ import { Form, Input, Button } from 'antd';
 import { loginFetch } from './../../services/user.js';
 import { modalNotification } from '../commons/Notifications.js';
 import { login } from './../../utils/auth.js';
+import Router from 'next/router';
 class LogIn extends React.Component {
     constructor(props) {
         super(props);
@@ -15,6 +16,7 @@ class LogIn extends React.Component {
             //Tal vez deberia ser mas robusto esto, en caso de que falle el loginFetch
             const { token } = await loginFetch( values );
             await login({ token });
+            Router.push("/");
             // if( !!data.success ){
             //     console.log(data);
             //     setState(oldValues => {

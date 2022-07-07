@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Router from 'next/router';
 import { Cookies } from 'react-cookie'
 import { logout } from './../../utils/auth'
+import { modalNotification } from './Notifications.js';
 
 const Navigator = () => {
     const cookies = new Cookies()
@@ -10,6 +12,12 @@ const Navigator = () => {
     useEffect(() => {
         setToken(cookies.get("token"));
     }, []);
+
+    const logoutClick = async () => {
+        await logout();
+        modalNotification("success", "Successfuly logout");
+        Router.reload(window.location.pathname);
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -27,8 +35,7 @@ const Navigator = () => {
                             {!token && (
                                 <li className="nav-item">
                                     <Link href="/user/login">
-                                        <a className="nav-link active" aria-current="page"
-                                        >Log in</a>
+                                        <a className="nav-link active" aria-current="page">Log in</a>
                                     </Link>
                                 </li>
                             )}
@@ -41,7 +48,7 @@ const Navigator = () => {
                             )}
                             {token && (
                                 <li className="nav-item">
-                                        <a className="nav-link" onClick={async () => await logout()} >Logout</a>
+                                        <a className="nav-link" onClick={async () => await logoutClick()} >Logout</a>
                                 </li>
                             )}
                         </ul>
