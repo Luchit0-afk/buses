@@ -1,38 +1,11 @@
-import { useCallback, useContext, useEffect } from "react"
 import Head from 'next/head'
-import FormPassenger from '../components/Forms/FormPassenger.js'
 import Router from 'next/router';
+import Navigator from './../components/commons/Navigator.js';
 import { getAllCities } from './../services/main.js';
 import { Image, Button } from 'antd';
-import { UserContext } from "./../config/context/UserContext.js";
-
 export default function Home({ cities }) {
-  const [userContext, setUserContext] = useContext(UserContext)
-  const verifyUser = useCallback(() => {
-    fetch("http://localhost:3000/user/refreshToken", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }).then(async response => {
-      if (response.ok) {
-        const data = await response.json()
-        setUserContext(oldValues => {
-          return { ...oldValues, token: data.token }
-        })
-      } else {
-        setUserContext(oldValues => {
-          return { ...oldValues, token: null }
-        })
-      }
-      // call refreshToken every 5 minutes to renew the authentication token.
-      setTimeout(verifyUser, 5 * 60 * 1000)
-    })
-  }, [setUserContext])
 
-  useEffect(() => {
-    verifyUser()
-  }, [verifyUser])
-
-  return userContext.token === null ? (
+  return (
     <div >
       <Head>
         <title>Buses App</title>
@@ -42,27 +15,7 @@ export default function Home({ cities }) {
       </Head>
 
       <main className='container'>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="#">
-              {/* Ajustar imagen al div */}
-              {/* <img src="images/logo.png" className="img-fluid" style={{ "objectFit": "contain"}}/> */}
-              Home
-            </a>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-              <div className="d-flex ms-auto">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="#" onClick={() => Router.push('/user/login')}>Log in</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" onClick={() => Router.push('/user/register')}>Register</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </nav>
+        <Navigator />
         <h1 className="d-flex justify-content-center mt-5">
           Welcome to Buses App
         </h1>
@@ -109,10 +62,6 @@ export default function Home({ cities }) {
       </main>
 
     </div>
-  ) : userContext.token ? (
-    <div>Welcome</div>
-  ) : (
-    <div>Cargando</div>
   )
 }
 

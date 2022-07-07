@@ -2,12 +2,8 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { loginFetch } from './../../services/user.js';
 import { modalNotification } from '../commons/Notifications.js';
-import { UserContext } from "./../../config/context/UserContext.js"
-
+import { login } from './../../utils/auth.js';
 class LogIn extends React.Component {
-
-    static contextType = UserContext;
-
     constructor(props) {
         super(props);
         this.state = {};
@@ -16,29 +12,27 @@ class LogIn extends React.Component {
 
     onFinish = async values => {
         try {
-            console.log(this.context);
-            const state = this.context[0];
-            const setState = this.context[1];
-            const data = await loginFetch( values );
-            if( !!data.success ){
-                console.log(data);
-                setState(oldValues => {
-                    return { ...oldValues, token: data.token }
-                  })
-                console.log(this.context);
-                //Working well, clean de fucking code
+            //Tal vez deberia ser mas robusto esto, en caso de que falle el loginFetch
+            const { token } = await loginFetch( values );
+            await login({ token });
+            // if( !!data.success ){
+            //     console.log(data);
+            //     setState(oldValues => {
+            //         return { ...oldValues, token: data.token }
+            //       })
+            //     //Working well, clean de fucking code
 
-                // if( !!isLoged.msg ){
-                //     modalNotification("warning", isLoged.msg.toString() );
-                // }
-                // else{
-                //     modalNotification("success", "You are login successfuly");
-                // }
-            }
-            else{
-                modalNotification("error", "Something went wrong when try to login.");
-                // modalNotification("error", isLoged.msg.toString() );
-            }
+            //     // if( !!isLoged.msg ){
+            //     //     modalNotification("warning", isLoged.msg.toString() );
+            //     // }
+            //     // else{
+            //     //     modalNotification("success", "You are login successfuly");
+            //     // }
+            // }
+            // else{
+            //     modalNotification("error", "Something went wrong when try to login.");
+            //     // modalNotification("error", isLoged.msg.toString() );
+            // }
         } catch(error) {
             console.log(error);
             modalNotification("error", error.toString());
@@ -50,10 +44,6 @@ class LogIn extends React.Component {
     };
 
     render() {
-        console.log(this.context);
-        // console.log(this.context);
-        // console.log(state);
-        // console.log(setState);
         return(
             <div>
                 <Form
@@ -74,7 +64,7 @@ class LogIn extends React.Component {
                         <Form.Item
                             label="Email"
                             // Changes username to email
-                            name="username"
+                            name="email"
                             rules={[
                                 {
                                     required: true,

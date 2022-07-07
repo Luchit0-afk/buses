@@ -1,5 +1,6 @@
-import Head from 'next/head'
-import FormPassenger from '../../components/Forms/FormPassenger.js'
+import Head from 'next/head';
+import Navigator from './../../components/commons/Navigator.js';
+import FormPassenger from '../../components/Forms/FormPassenger.js';
 import { getAllCities } from './../../services/main.js';
 
 export default function BuyATicket({ cities }) {
@@ -13,25 +14,7 @@ export default function BuyATicket({ cities }) {
             </Head>
 
             <main className='container'>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <div className="container-fluid">
-                        <a className="navbar-brand" href="/">
-                            Home
-                        </a>
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <div className="d-flex ms-auto">
-                                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li className="nav-item">
-                                        <a className="nav-link active" aria-current="page" href="#">Log in</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="#">Register</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
+                <Navigator />
                 <h1 className="d-flex justify-content-center mt-4 mb-0">
                     Buy a Ticket
                 </h1>

@@ -1,6 +1,6 @@
-import Head from 'next/head'
-import Register from '../../components/Forms/Register.js'
-import { getAllCities } from './../../services/main.js';
+import Head from 'next/head';
+import Navigator from './../../components/commons/Navigator.js';
+import Register from '../../components/Forms/Register.js';
 
 export default function RegisterPage() {
     return (
@@ -13,31 +13,11 @@ export default function RegisterPage() {
             </Head>
 
             <main className='container'>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <div className="container-fluid">
-                        <a className="navbar-brand" href="/">
-                            Home
-                        </a>
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <div className="d-flex ms-auto">
-                                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li className="nav-item">
-                                        <a className="nav-link active" aria-current="page" href="#">Log in</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="#">Register</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
+                <Navigator />
                 <h1 className="d-flex justify-content-center my-4 ">
                     Register
                 </h1>
-
                 <Register />
-
                 <hr />
                 <footer className="d-flex justify-content-center text-center mx-5">
                     <p>Test Footer</p>

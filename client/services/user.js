@@ -1,5 +1,5 @@
 export const registerFetch = async (data) => {
-    const res = await fetch('http://localhost:3000/user/register',
+    const res = await fetch('http://localhost:3000/auth/register',
         { 
             method: 'POST', 
             headers: {
@@ -12,7 +12,7 @@ export const registerFetch = async (data) => {
 }
 
 export const loginFetch = async (data) => {
-    const res = await fetch('http://localhost:3000/user/login',
+    const res = await fetch('http://localhost:3000/auth/login',
         { 
             method: 'POST', 
             headers: {

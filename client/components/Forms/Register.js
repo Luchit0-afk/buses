@@ -2,12 +2,8 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { registerFetch } from './../../services/user.js';
 import { modalNotification } from '../commons/Notifications.js';
-import { UserContext } from "./../../config/context/UserContext.js"
-
+import { login } from './../../utils/auth.js';
 class Register extends React.Component {
-
-    static contextType = UserContext;
-
     constructor(props) {
         super(props);
         this.state = {};
@@ -16,22 +12,22 @@ class Register extends React.Component {
 
     onFinish = async values => {
         try {
-            const state = this.context[0];
-            const setState = this.context[1];
-            const data = await registerFetch( values );
-            if( !!data.success ){
-                console.log(data);
-                await setState(oldValues => {
-                    return { ...oldValues, token: data.token }
-                  })
-                console.log(this.context);
-                //Working bad, if register a user not charge the token in the context.
-                //The second chance, the token is charged
-                modalNotification("success", "The user has been charged");
-            }
-            else{
-                modalNotification("error", "Something went wrong when try to register.");
-            }
+            //Tal vez deberia ser mas robusto esto, en caso de que falle el registerFetch
+            const { token } = await registerFetch( values );
+            await login({ token });
+            // if( !!data.success ){
+            //     console.log(data);
+            //     await setState(oldValues => {
+            //         return { ...oldValues, token: data.token }
+            //       })
+            //     console.log(this.context);
+            //     //Working bad, if register a user not charge the token in the context.
+            //     //The second chance, the token is charged
+            //     modalNotification("success", "The user has been charged");
+            // }
+            // else{
+            //     modalNotification("error", "Something went wrong when try to register.");
+            // }
         } catch(error) {
             console.log(error);
             modalNotification("error", error.toString());
@@ -63,8 +59,7 @@ class Register extends React.Component {
                         </Form.Item> */}
                         <Form.Item
                             label="Email"
-                            // Changes username to email
-                            name="username"
+                            name="email"
                             rules={[
                                 {
                                     required: true,

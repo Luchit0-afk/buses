@@ -1,6 +1,5 @@
-import Head from 'next/head'
-import styles from './../../styles/Home.module.css'
-import FormTrip from '../../components/Forms/FormTrip.js'
+import Head from 'next/head';
+import FormTrip from './../../components/Forms/FormTrip.js';
 import { getAllCities } from './../../services/main.js';
 
 export default function Home({ cities }) {
