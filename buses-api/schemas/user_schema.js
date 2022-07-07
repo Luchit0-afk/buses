@@ -1,34 +1,50 @@
-const mongoose = require("mongoose")
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt-nodejs');
 
-const passportLocalMongoose = require("passport-local-mongoose")
+const { Schema } = mongoose;
 
-//Intentar eliminar este schema y pasarlo directamente con otro tipo
-const Session = new Schema({
-    refreshToken: {
-        type: String,
-        default: "",
-    },
-})
 
-const User = new Schema({
-    authStrategy: {
-        type: String,
-        default: "local",
-    },
-    refreshToken: {
-        type: [Session],
-    },
-})
+// creating user schema
+const userSchema = new Schema({
+  email: {
+    type: String,
+    unique: true,
+    lowercase: true
+  },
+  password: String
+});
 
-//Remove refreshToken from the response
-User.set("toJSON", {
-    transform: function (doc, ret, options) {
-        delete ret.refreshToken
-        return ret
-    },
-})
+// encrypt password before saving a model
+userSchema.pre('save', function (next) {
+  const user = this;
+  // generating hashed password
+  bcrypt.genSalt(10, function (err, salt) {
+    if (err) {
+      return next(err);
+    }
+    bcrypt.hash(user.password, salt, null, function (err, hash) {
+      if (err) {
+        return next(err);
+      }
 
-User.plugin(passportLocalMongoose)
+      user.password = hash;
 
-module.exports = mongoose.model("User", User)
+      // proceed to saving the model
+      next();
+    });
+  });
+});
+
+// comparing saved hashed password and provided password during signing in
+userSchema.methods.comparePasswords = function (password, callback) {
+  bcrypt.compare(password, this.password, function (err, isMatch) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, isMatch);
+  });
+};
+
+const User = mongoose.model('user', userSchema);
+
+module.exports = User;

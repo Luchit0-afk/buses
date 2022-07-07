@@ -3,10 +3,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
 require('./config/db_connection.js');
-// require('./config/passport.js');
-require("./config/strategies/JwtStrategy")
-require("./config/strategies/LocalStrategy")
-require("./config/authenticate")
+require('./config/passport.js');
 
 var createError = require('http-errors');
 var express = require('express');
@@ -14,15 +11,13 @@ var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var passport = require('passport');
 var session = require('express-session');
-var PassportLocal = require('passport-local').Strategy;
 
 var CreditCard = require('./routes/credit_card/router.js');
 var Trip = require('./routes/trip/router.js');
 var City = require('./routes/city/router.js');
 var Passenger = require('./routes/passenger/router.js');
-var User = require('./routes/user/router.js');
+const Auth = require('./routes/auth/router.js');
 
 var livereload = require("livereload");
 var connectLiveReload = require("connect-livereload");
@@ -48,16 +43,13 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 //Routes
 app.use('/credit_card', CreditCard);
 app.use('/trip', Trip);
 app.use('/city', City);
 app.use('/passenger', Passenger);
-app.use('/user', User);
-
+app.use('/auth', Auth);
 
 //Mejorar la captura del error 404
 // catch 404 and forward to error handler
