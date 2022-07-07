@@ -14,9 +14,15 @@ const Navigator = () => {
     }, []);
 
     const logoutClick = async () => {
-        await logout();
-        modalNotification("success", "Successfuly logout");
-        Router.reload(window.location.pathname);
+        try {
+            await logout();
+            modalNotification("success", "Successfuly logout");
+            //Tal vez deberia haber una espera aca
+            Router.reload(window.location.pathname);
+        } catch (err) {
+            console.log(err);
+            modalNotification("error", "Something went wrong when try to logout.", "Please, try again");
+        }
     }
 
     return (
@@ -48,7 +54,7 @@ const Navigator = () => {
                             )}
                             {token && (
                                 <li className="nav-item">
-                                        <a className="nav-link" onClick={async () => await logoutClick()} >Logout</a>
+                                    <a className="nav-link" onClick={async () => await logoutClick()} >Logout</a>
                                 </li>
                             )}
                         </ul>

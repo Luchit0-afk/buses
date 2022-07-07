@@ -8,7 +8,7 @@ function tokenForUser(user) {
 }
 
 module.exports.login = async function (req, res) {
-    res.status(200).json({ token: tokenForUser(req.user) });
+    res.status(200).json({ success: true, token: tokenForUser(req.user) });
 }
 
 module.exports.register = async function (req, res, next) {
@@ -16,28 +16,25 @@ module.exports.register = async function (req, res, next) {
     const password = req.body.password;
 
     if (!email || !password) {
-        return res.status(422).json({ msg: 'Email and password must be provided' });
+        return res.status(422).json({ success: false, msg: 'Email and password must be provided' });
     }
     else {
         User.findOne({ email: email }, function (err, existingUser) {
             if (err) {
                 return next(err);
             }
-
             if (existingUser) {
-                return res.status(422).json({ msg: 'Email is already in use...' });
+                return res.status(422).json({ success: false, msg: 'Email is already in use...' });
             }
-
             const user = new User({
                 email: email,
                 password: password
             });
-
             user.save(function (err) {
                 if (err) {
                     return next(err);
                 }
-                res.status(200).json({ token: tokenForUser(user) });
+                res.status(200).json({ success: true, token: tokenForUser(user) });
             });
         });
     }

@@ -13,23 +13,15 @@ class Register extends React.Component {
 
     onFinish = async values => {
         try {
-            //Tal vez deberia ser mas robusto esto, en caso de que falle el registerFetch
-            const { token } = await registerFetch( values );
-            await login({ token });
-            Router.push("/");
-            // if( !!data.success ){
-            //     console.log(data);
-            //     await setState(oldValues => {
-            //         return { ...oldValues, token: data.token }
-            //       })
-            //     console.log(this.context);
-            //     //Working bad, if register a user not charge the token in the context.
-            //     //The second chance, the token is charged
-            //     modalNotification("success", "The user has been charged");
-            // }
-            // else{
-            //     modalNotification("error", "Something went wrong when try to register.");
-            // }
+            const { token, success, msg } = await registerFetch( values );
+            if( !!success ){
+                await login({ token });
+                modalNotification("success", "Successfuly register");
+                Router.push("/");
+            }
+            else{
+                modalNotification("error", msg);
+            }
         } catch(error) {
             console.log(error);
             modalNotification("error", error.toString());

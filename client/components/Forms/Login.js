@@ -13,31 +13,20 @@ class LogIn extends React.Component {
 
     onFinish = async values => {
         try {
-            //Tal vez deberia ser mas robusto esto, en caso de que falle el loginFetch
-            const { token } = await loginFetch( values );
-            await login({ token });
-            Router.push("/");
-            // if( !!data.success ){
-            //     console.log(data);
-            //     setState(oldValues => {
-            //         return { ...oldValues, token: data.token }
-            //       })
-            //     //Working well, clean de fucking code
-
-            //     // if( !!isLoged.msg ){
-            //     //     modalNotification("warning", isLoged.msg.toString() );
-            //     // }
-            //     // else{
-            //     //     modalNotification("success", "You are login successfuly");
-            //     // }
-            // }
-            // else{
-            //     modalNotification("error", "Something went wrong when try to login.");
-            //     // modalNotification("error", isLoged.msg.toString() );
-            // }
+            const { token, success } = await loginFetch( values );
+            if( !!success ){
+                await login({ token });
+                modalNotification("success", "Successfuly login");
+                Router.push("/");
+            }
+            else{
+                //Tal vez hay otras posibilidades de error,
+                modalNotification("warning", "The email and password can't be registed.", "Please, register");
+            }
         } catch(error) {
             console.log(error);
-            modalNotification("error", error.toString());
+            //Tal vez hay otras posibilidades de error,
+            modalNotification("warning", "The email and password can't be registed.", "Please, register o try again.");
         }
     }
 
